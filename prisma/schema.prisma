@@ -6,14 +6,25 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  //provider = "postgresql"
-  provider = "sqlite"
+  provider = "postgresql"
+  //provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+enum Plan {
+  FREE
+  PRO
+  //ENTERPRISE
+}
+
+enum SubscriptionPeriod {
+  MONTHLY
+  YEARLY
+}
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -23,7 +34,34 @@ model User {
   username  String   @unique
   avatarUrl String?
   hashedRefreshToken String?
+  plan    Plan     @default(FREE)
+  customerId String? @unique // Stripe Customer ID
+  subscription Subscription?
   // posts     Post[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Subscription {
+  id        String   @id @default(uuid())
+  userId    String  @unique
+  plan      Plan
+  period    SubscriptionPeriod
+
+  startDate DateTime @default(now())
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// model AiChat {
+//   id        String   @id @default(uuid())
+//   user      User     @relation(fields: [userId], references: [id])
+//   userId    String
+//   message   String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }

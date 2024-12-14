@@ -14,6 +14,16 @@ interface EnvVars {
   GOOGLE_CLIENT_SECRET: string;
   GOOGLE_REDIRECT_URI: string;
   FRONTEND_URL: string;
+  STRIPE_SECRET_KEY: string;
+  // STRIPE_MONTHLY_PLAN_LINK=https://buy.stripe.com/test_cN2dQS2rSaoo2QMcMM
+  // STRIPE_YEARLY_PLAN_LINK=https://buy.stripe.com/test_00g5kmaYodAA8b67st
+  // STRIPE_MONTHLY_PRICE_ID=price_1QVZrcD0U66Zs2Cio3WnbhuL
+  // STRIPE_YEARLY_PRICE_ID=price_1QVZugD0U66Zs2Cixg1mxhDs
+  STRIPE_MONTHLY_PLAN_LINK: string;
+  STRIPE_YEARLY_PLAN_LINK: string;
+  STRIPE_MONTHLY_PRICE_ID: string;
+  STRIPE_YEARLY_PRICE_ID: string;
+  VAK_CLASSIFICATION_MICROSERVICE_URL: string;
 }
 
 const envsSchema = joi
@@ -33,6 +43,12 @@ const envsSchema = joi
     GOOGLE_CLIENT_SECRET: joi.string().required(),
     GOOGLE_REDIRECT_URI: joi.string().required(),
     FRONTEND_URL: joi.string().required(),
+    STRIPE_SECRET_KEY: joi.string().required(),
+    STRIPE_MONTHLY_PLAN_LINK: joi.string().required(),
+    STRIPE_YEARLY_PLAN_LINK: joi.string().required(),
+    STRIPE_MONTHLY_PRICE_ID: joi.string().required(),
+    STRIPE_YEARLY_PRICE_ID: joi.string().required(),
+    VAK_CLASSIFICATION_MICROSERVICE_URL: joi.string().required(),
   })
   .unknown(true); //Permite que se puedan agregar mas variables de entorno sin que falle la validacion
 //.required();
@@ -56,4 +72,10 @@ export const envs = {
   googleClientSecret: envVars.GOOGLE_CLIENT_SECRET,
   googleCallbackUrl: envVars.GOOGLE_REDIRECT_URI,
   frontendUrl: envVars.FRONTEND_URL,
+  stripeSecretKey: envVars.STRIPE_SECRET_KEY,
+  stripeMonthlyPlanLink: envVars.STRIPE_MONTHLY_PLAN_LINK,
+  stripeYearlyPlanLink: envVars.STRIPE_YEARLY_PLAN_LINK,
+  stripeMonthlyPriceId: envVars.STRIPE_MONTHLY_PRICE_ID,
+  stripeYearlyPriceId: envVars.STRIPE_YEARLY_PRICE_ID,
+  vakClassificationMicroserviceUrl: envVars.VAK_CLASSIFICATION_MICROSERVICE_URL,
 };

@@ -21,10 +21,9 @@ export class UserRepository
     if (data.password == '') {
       actualData = data
     }else{
-      actualData = {...actualData, password: encryption(data.password)};
+      actualData = {...data, password: encryption(data.password)};
     }
     return this.user.create({data: actualData as any});
-
   }
 
   async findUserById(id: string) {

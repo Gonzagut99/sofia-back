@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @ApiOperation({ summary: 'Crear nuevo usuario' })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -35,15 +37,30 @@ export class UsersController {
   //   return this.usersService.findOne(id);
   // }
 
+  @Public()
   @ApiOperation({ summary: 'Buscar usuario por email' })
   @Get('email/:email')
   findUserByEmail(@Param('email') email: string) {
     return this.usersService.findUserByEmail(email);
   }
 
+  @Public()
+  @ApiOperation({ summary: 'Buscar usuario por customer id' })
+  @Get('customer/:customerId')
+  findUserByCustomerId(@Param('customerId') customerId: string) {
+    return this.usersService.findUserByCustomerId(customerId);
+  }
+
   @ApiOperation({ summary: 'Actualizar usuario por id' })
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
+  }
+
+  @Public() //It lacks security,  TODO: Add security
+  @ApiOperation({ summary: 'Actualizar usuario por id cuando se escucha enventos de stripe desde el front' })
+  @Put('stripe/:id')
+  updateStripe(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 

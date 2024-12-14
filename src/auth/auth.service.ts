@@ -107,23 +107,7 @@ export class AuthService {
             return 'No user from google';
         }
         return req.user.access_token;
-    }
-
-    // async login(singinDto: SinginDto):Promise<string> {
-    //     const { email, password } = singinDto;
-    //     const user = await this.userService.findUserByEmail(email);
-    //     if(!user) {
-    //         // return 'User not found';
-    //         throw new Error('User not found');
-    //     }
-    //     const decryptedPassword:string = user.password;
-    //     if(user.password !== password) {
-    //         throw new Error('Invalid credentials');
-    //     }
-    //     const payload = { username: user.name, id: user.id };
-    //     const accessToken = this.jwtService.signAsync(payload);
-    //     return accessToken;
-    // }
+    }    
 
     generateJwtToken(user: any) {
         const payload = { username: user.name || user.username, id: user.id };

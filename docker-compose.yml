@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    command: npm run start:dev
+    #environment:
+    #   - DATABASE_HOST=${DATABASE_HOST}
+    #   - DATABASE_PORT=${DATABASE_PORT}
+    #   - DATABASE_USER=${DATABASE_USER}
+    #   - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+    #   - DATABASE_NAME=${DATABASE_NAME}
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+      - ./prisma/migrations:/app/prisma/migrations
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - sofia-network
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sofia_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - sofia-network
+
+volumes:
+  db-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /d:/Certus/ciclo6/arq_de_software/Proyectos/sofia/sofia-back/sofia-back/data
+
+networks:
+  sofia-network:

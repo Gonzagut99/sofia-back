@@ -6,6 +6,8 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt.auth.guard';
 import { JwtAuthGuard } from './guards/jwt.auth.guard';
 import { Public } from './decorators/public.decorator';
+import { Response } from 'express';
+import { setAuthCookies } from './auth.cookies';
 
 @Controller('auth')
 export class AuthController {
@@ -48,10 +50,11 @@ export class AuthController {
     @Public()
     @UseGuards(GoogleAuthGuard)
     @Get('google/callback')
-    async googleCallback(@Req() req, @Res() res) {
+    async googleCallback(@Req() req, @Res() res:Response) {
         const response = await this.authService.login(req.user.id);
-        res.redirect(`${envs.frontendUrl}?token=${response.accessToken}`);
-        //initiates the google login process
+        // res.redirect(`${envs.frontendUrl}?token=${response.accessToken}`);
+        setAuthCookies(res, response.accessToken, response.refreshToken, response.id);
+        res.redirect(envs.frontendUrl);
     }
 
 }

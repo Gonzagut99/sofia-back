@@ -30,6 +30,14 @@ export class UsersService{
     return this.repository.findUserByEmail(email);
   }
 
+  async findUserByCustomerId(customerId: string) {
+    return this.repository.user.findFirst({
+      where: {
+        customerId: customerId,
+      },
+    });
+  }
+
   async findAll() {
     return this.repository.user.findMany();
   }
